@@ -32,3 +32,16 @@ jobs:
       - name: Run tests
         run: |
           mvn test
+      
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-results
+          path: target/surefire-reports 
+
+      - name: Check if any tests failed
+        if: failure()
+        run: |
+          echo "Tests failed, please check the logs."
+          exit 1  # Force the CI to fail if tests fail
